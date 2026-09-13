@@ -1,3 +1,4 @@
+import TaskItem from "./components/TaskItem";
 import type { Task } from "./types/task";
 
 function App() {
@@ -13,11 +14,10 @@ function App() {
 
   return (
     <main>
-      <h1>{task.title}</h1>
-      <p>{task.description}</p>
-      <p>Priority: {task.priority}</p>
-      <p>Category: {task.category}</p>
-      <p>Completed: {task.completed ? "Yes" : "No"}</p>
+      <h1>TaskFlow</h1>
+
+      <TaskItem
+        task={task} />
     </main>
   );
 }
