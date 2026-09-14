@@ -2,16 +2,26 @@ import type { Task } from "../types/task";
 
 type TaskItemProps = {
     task: Task;
+    onToggle: (id: string) => void;
 };
 
-function TaskItem({ task }: TaskItemProps) {
+function TaskItem({ task, onToggle }: TaskItemProps) {
     return (
         <article>
             <h2>{task.title}</h2>
-            <p>{task.description}</p>
+
+            {task.description && <p>{task.description}</p>}
+
             <p>Priority: {task.priority}</p>
             <p>Category: {task.category}</p>
-            <p>{task.completed ? "Completed" : "Not completed"}</p>
+
+            <p>
+                Status: {task.completed ? "Completed" : "Not completed"}
+            </p>
+
+            <button onClick={() => onToggle(task.id)}>
+                {task.completed ? "Mark incomplete" : "Mark complete"}
+            </button>
         </article>
     );
 }
