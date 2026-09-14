@@ -4,6 +4,11 @@ import TaskItem from "./components/TaskItem";
 import TaskForm from "./components/TaskForm";
 
 function App() {
+
+  const handleAddTask = (newTask: Task): void => {
+    setTasks((currentTasks) => [...currentTasks, newTask]);
+  };
+
   const [tasks, setTasks] = useState<Task[]>([
     {
       id: "task-001",
@@ -38,7 +43,7 @@ function App() {
     <main>
       <h1>TaskFlow</h1>
 
-      <TaskForm />
+      <TaskForm onAddTask={handleAddTask} />
 
       <p>Total tasks: {tasks.length}</p>
 
