@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+import useLocalStorage from "./hooks/useLocalStorage";
 
 import type { Task } from "./types/task";
 import type { TaskFilter } from "./types/filter";
@@ -7,42 +9,28 @@ import TaskItem from "./components/TaskItem";
 import TaskForm from "./components/TaskForm";
 
 function App() {
-
-  const [tasks, setTasks] = useState<Task[]>(() => {
-    const savedTasks = localStorage.getItem("taskflow-tasks");
-
-    if (!savedTasks) {
-      return [
-        {
-          id: "task-001",
-          title: "Learn TypeScript",
-          description: "Practice TypeScript fundamentals",
-          priority: "high",
-          completed: false,
-          category: "study",
-          createdAt: new Date().toISOString(),
-        },
-        {
-          id: "task-002",
-          title: "Build TaskFlow",
-          priority: "medium",
-          completed: false,
-          category: "work",
-          createdAt: new Date().toISOString(),
-        },
-      ];
-    }
-
-    try {
-      return JSON.parse(savedTasks) as Task[];
-    } catch {
-      return [];
-    }
-  });
-
-  useEffect(() => {
-    localStorage.setItem("taskflow-tasks", JSON.stringify(tasks));
-  }, [tasks]);
+  const [tasks, setTasks] = useLocalStorage<Task[]>(
+    "taskflow-tasks",
+    [
+      {
+        id: "task-001",
+        title: "Learn TypeScript",
+        description: "Practice TypeScript fundamentals",
+        priority: "high",
+        completed: false,
+        category: "study",
+        createdAt: new Date().toISOString(),
+      },
+      {
+        id: "task-002",
+        title: "Build TaskFlow",
+        priority: "medium",
+        completed: false,
+        category: "work",
+        createdAt: new Date().toISOString(),
+      },
+    ]
+  );
 
   const [filter, setFilter] = useState<TaskFilter>("all");
 
@@ -81,7 +69,9 @@ function App() {
       <div>
         <button onClick={() => setFilter("all")}>All</button>
         <button onClick={() => setFilter("active")}>Active</button>
-        <button onClick={() => setFilter("completed")}>Completed</button>
+        <button onClick={() => setFilter("completed")}>
+          Completed
+        </button>
       </div>
 
       <p>Total tasks: {tasks.length}</p>
