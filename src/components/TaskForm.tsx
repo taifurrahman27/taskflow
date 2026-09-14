@@ -1,25 +1,27 @@
 import { useState, type FormEvent } from "react";
-import type { Task } from "../types/task";
+import type { CreateTask } from "../types/task";
 
 type TaskFormProps = {
-    onAddTask: (task: Task) => void;
+    onAddTask: (task: CreateTask) => void;
 };
 
 function TaskForm({ onAddTask }: TaskFormProps) {
     const [title, setTitle] = useState("");
-    const [priority, setPriority] = useState<Task["priority"]>("medium");
+    const [priority, setPriority] =
+        useState<CreateTask["priority"]>("medium");
     const [category, setCategory] =
-        useState<Task["category"]>("personal");
+        useState<CreateTask["category"]>("personal");
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+    const handleSubmit = (
+        event: FormEvent<HTMLFormElement>
+    ): void => {
         event.preventDefault();
 
         if (!title.trim()) {
             return;
         }
 
-        const newTask: Task = {
-            id: crypto.randomUUID(),
+        const newTask: CreateTask = {
             title: title.trim(),
             priority,
             completed: false,
@@ -55,7 +57,9 @@ function TaskForm({ onAddTask }: TaskFormProps) {
                     id="priority"
                     value={priority}
                     onChange={(event) =>
-                        setPriority(event.target.value as Task["priority"])
+                        setPriority(
+                            event.target.value as CreateTask["priority"]
+                        )
                     }
                 >
                     <option value="low">Low</option>
@@ -71,7 +75,9 @@ function TaskForm({ onAddTask }: TaskFormProps) {
                     id="category"
                     value={category}
                     onChange={(event) =>
-                        setCategory(event.target.value as Task["category"])
+                        setCategory(
+                            event.target.value as CreateTask["category"]
+                        )
                     }
                 >
                     <option value="work">Work</option>

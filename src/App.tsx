@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import useLocalStorage from "./hooks/useLocalStorage";
 
-import type { Task } from "./types/task";
+import type { CreateTask, Task } from "./types/task";
 import type { TaskFilter } from "./types/filter";
 
 import TaskItem from "./components/TaskItem";
@@ -34,8 +34,13 @@ function App() {
 
   const [filter, setFilter] = useState<TaskFilter>("all");
 
-  const handleAddTask = (newTask: Task): void => {
-    setTasks((currentTasks) => [...currentTasks, newTask]);
+  const handleAddTask = (newTask: CreateTask): void => {
+    const task: Task = {
+      ...newTask,
+      id: crypto.randomUUID(),
+    };
+
+    setTasks((currentTasks) => [...currentTasks, task]);
   };
 
   const handleToggle = (id: string): void => {

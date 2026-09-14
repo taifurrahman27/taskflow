@@ -7,3 +7,5 @@ export type Task = {
     category: "work" | "study" | "personal";
     createdAt: string;
 };
+
+export type CreateTask = Omit<Task, "id">;
