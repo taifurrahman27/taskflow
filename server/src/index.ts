@@ -2,14 +2,22 @@ import express from "express";
 
 import { tasks } from "./data/tasks";
 import type { TaskResponse, TasksResponse } from "./types/api";
-import type { CreateTask, Task } from "./types/task";
+import type { Task } from "./types/task";
+import {
+    isCreateTask,
+    isTaskUpdate,
+} from "./utils/validation";
+import "dotenv/config";
+import cors from "cors";
+
 
 
 const app = express();
+
+app.use(cors());
 app.use(express.json());
 
-const PORT = 5000;
-
+const PORT = Number(process.env.PORT) || 5000;
 
 
 app.get("/", (_req, res) => {
@@ -29,8 +37,18 @@ app.get("/tasks", (_req, res) => {
 });
 
 
+
 app.post("/tasks", (req, res) => {
-    const newTaskData = req.body as CreateTask;
+    const newTaskData: unknown = req.body;
+
+    if (!isCreateTask(newTaskData)) {
+        res.status(400).json({
+            success: false,
+            data: null,
+            message: "Invalid task data",
+        });
+        return;
+    }
 
     const newTask: Task = {
         ...newTaskData,
@@ -50,7 +68,17 @@ app.post("/tasks", (req, res) => {
 
 app.patch("/tasks/:id", (req, res) => {
     const taskId = req.params.id;
-    const updates = req.body as Partial<Task>;
+    const updates: unknown = req.body;
+
+    if (!isTaskUpdate(updates)) {
+        res.status(400).json({
+            success: false,
+            data: null,
+            message: "Invalid task update data",
+        });
+
+        return;
+    }
 
     const taskIndex = tasks.findIndex((task) => task.id === taskId);
 
@@ -60,6 +88,7 @@ app.patch("/tasks/:id", (req, res) => {
             data: null,
             message: "Task not found",
         });
+
         return;
     }
 
@@ -75,7 +104,6 @@ app.patch("/tasks/:id", (req, res) => {
 
     res.json(response);
 });
-
 
 app.delete("/tasks/:id", (req, res) => {
     const taskId = req.params.id;
@@ -101,6 +129,14 @@ app.delete("/tasks/:id", (req, res) => {
     res.json(response);
 });
 
+
+app.use((_req, res) => {
+    res.status(404).json({
+        success: false,
+        data: null,
+        message: "Route not found",
+    });
+});
 
 app.listen(PORT, () => {
     console.log(`TaskFlow server running on port ${PORT}`);
