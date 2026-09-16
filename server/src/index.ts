@@ -77,6 +77,30 @@ app.patch("/tasks/:id", (req, res) => {
 });
 
 
+app.delete("/tasks/:id", (req, res) => {
+    const taskId = req.params.id;
+
+    const taskIndex = tasks.findIndex((task) => task.id === taskId);
+
+    if (taskIndex === -1) {
+        res.status(404).json({
+            success: false,
+            data: null,
+            message: "Task not found",
+        });
+        return;
+    }
+
+    const deletedTask = tasks.splice(taskIndex, 1)[0];
+
+    const response: TaskResponse = {
+        success: true,
+        data: deletedTask,
+    };
+
+    res.json(response);
+});
+
 
 app.listen(PORT, () => {
     console.log(`TaskFlow server running on port ${PORT}`);
