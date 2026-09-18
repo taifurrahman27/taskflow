@@ -36,6 +36,28 @@ app.get("/tasks", (_req, res) => {
     res.json(response);
 });
 
+app.get("/tasks/:id", (req, res) => {
+    const taskId = req.params.id;
+
+    const task = tasks.find((task) => task.id === taskId);
+
+    if (!task) {
+        res.status(404).json({
+            success: false,
+            data: null,
+            message: "Task not found",
+        });
+        return;
+    }
+
+    const response: TaskResponse = {
+        success: true,
+        data: task,
+    };
+
+    res.json(response);
+});
+
 
 
 app.post("/tasks", (req, res) => {
