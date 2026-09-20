@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 
-import { getTasks, updateTask } from "../api/tasks";
+import {
+    createTask,
+    getTasks,
+    updateTask,
+} from "../api/tasks";
 
-import type { Task } from "../types/task";
+import type { CreateTask, Task } from "../types/task";
 
 function useTasks() {
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -24,6 +28,19 @@ function useTasks() {
         loadTasks();
     }, []);
 
+    const addTask = async (newTask: CreateTask): Promise<void> => {
+        try {
+            const createdTask = await createTask(newTask);
+
+            setTasks((currentTasks) => [
+                ...currentTasks,
+                createdTask,
+            ]);
+        } catch {
+            setError("Failed to create task");
+        }
+    };
+
     const toggleTask = async (id: string): Promise<void> => {
         try {
             const task = tasks.find((task) => task.id === id);
@@ -38,8 +55,8 @@ function useTasks() {
 
             setTasks((currentTasks) =>
                 currentTasks.map((currentTask) =>
-                    currentTask.id === id ? updatedTask : currentTask
-                )
+                    currentTask.id === id ? updatedTask : currentTask,
+                ),
             );
         } catch {
             setError("Failed to update task");
@@ -50,6 +67,7 @@ function useTasks() {
         tasks,
         loading,
         error,
+        addTask,
         toggleTask,
     };
 }

@@ -9,12 +9,18 @@ import TaskItem from "./components/TaskItem";
 import TaskForm from "./components/TaskForm";
 
 function App() {
-  const { tasks, loading, error, toggleTask } = useTasks();
+  const {
+    tasks,
+    loading,
+    error,
+    addTask,
+    toggleTask,
+  } = useTasks();
 
   const [filter, setFilter] = useState<TaskFilter>("all");
 
   const handleAddTask = (newTask: CreateTask): void => {
-    console.log("New task:", newTask);
+    void addTask(newTask);
   };
 
   const handleToggle = (id: string): void => {
@@ -48,7 +54,9 @@ function App() {
       <TaskForm onAddTask={handleAddTask} />
 
       <div>
-        <button onClick={() => setFilter("all")}>All</button>
+        <button onClick={() => setFilter("all")}>
+          All
+        </button>
 
         <button onClick={() => setFilter("active")}>
           Active
