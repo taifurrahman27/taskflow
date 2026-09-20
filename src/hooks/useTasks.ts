@@ -4,7 +4,9 @@ import {
     createTask,
     getTasks,
     updateTask,
+    deleteTask,
 } from "../api/tasks";
+
 
 import type { CreateTask, Task } from "../types/task";
 
@@ -63,13 +65,28 @@ function useTasks() {
         }
     };
 
+
+    const removeTask = async (id: string): Promise<void> => {
+        try {
+            await deleteTask(id);
+
+            setTasks((currentTasks) =>
+                currentTasks.filter((task) => task.id !== id),
+            );
+        } catch {
+            setError("Failed to delete task");
+        }
+    };
+
     return {
         tasks,
         loading,
         error,
         addTask,
         toggleTask,
+        removeTask,
     };
+
 }
 
 export default useTasks;

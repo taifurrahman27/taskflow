@@ -3,9 +3,14 @@ import type { Task } from "../types/task";
 type TaskItemProps = {
     task: Task;
     onToggle: (id: string) => void;
+    onDelete: (id: string) => void;
 };
 
-function TaskItem({ task, onToggle }: TaskItemProps) {
+function TaskItem({
+    task,
+    onToggle,
+    onDelete,
+}: TaskItemProps) {
     return (
         <article>
             <h2>{task.title}</h2>
@@ -13,6 +18,7 @@ function TaskItem({ task, onToggle }: TaskItemProps) {
             {task.description && <p>{task.description}</p>}
 
             <p>Priority: {task.priority}</p>
+
             <p>Category: {task.category}</p>
 
             <p>
@@ -21,6 +27,10 @@ function TaskItem({ task, onToggle }: TaskItemProps) {
 
             <button onClick={() => onToggle(task.id)}>
                 {task.completed ? "Mark incomplete" : "Mark complete"}
+            </button>
+
+            <button onClick={() => onDelete(task.id)}>
+                Delete
             </button>
         </article>
     );

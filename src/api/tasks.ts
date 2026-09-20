@@ -64,3 +64,15 @@ export async function updateTask(
 
     return result.data;
 }
+
+
+export async function deleteTask(id: string): Promise<void> {
+    const response = await fetch(`http://localhost:5000/tasks/${id}`, {
+        method: "DELETE",
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to delete task");
+    }
+}
+

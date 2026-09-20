@@ -15,6 +15,7 @@ function App() {
     error,
     addTask,
     toggleTask,
+    removeTask,
   } = useTasks();
 
   const [filter, setFilter] = useState<TaskFilter>("all");
@@ -74,6 +75,7 @@ function App() {
           key={task.id}
           task={task}
           onToggle={handleToggle}
+          onDelete={removeTask}
         />
       ))}
     </main>
