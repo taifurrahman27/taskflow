@@ -9,7 +9,7 @@ import TaskItem from "./components/TaskItem";
 import TaskForm from "./components/TaskForm";
 
 function App() {
-  const { tasks, loading, error } = useTasks();
+  const { tasks, loading, error, toggleTask } = useTasks();
 
   const [filter, setFilter] = useState<TaskFilter>("all");
 
@@ -18,7 +18,7 @@ function App() {
   };
 
   const handleToggle = (id: string): void => {
-    console.log("Toggle task:", id);
+    void toggleTask(id);
   };
 
   const filteredTasks = tasks.filter((task) => {
