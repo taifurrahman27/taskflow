@@ -1,78 +1,65 @@
 import type { CreateTask, Task } from "../types/task";
 
-type TasksResponse = {
+type ApiResponse<T> = {
     success: boolean;
-    data: Task[];
+    data: T;
     message?: string;
 };
 
-type TaskResponse = {
-    success: boolean;
-    data: Task;
-    message?: string;
-};
-
-export async function getTasks(): Promise<Task[]> {
-    const response = await fetch("http://localhost:5000/tasks");
+async function request<T>(
+    url: string,
+    options?: RequestInit,
+): Promise<T> {
+    const response = await fetch(url, options);
 
     if (!response.ok) {
-        throw new Error("Failed to fetch tasks");
+        throw new Error("Request failed");
     }
 
-    const result: TasksResponse = await response.json();
+    const result: ApiResponse<T> = await response.json();
 
     return result.data;
+}
+
+export async function getTasks(): Promise<Task[]> {
+    return request<Task[]>("http://localhost:5000/tasks");
 }
 
 export async function createTask(
     task: CreateTask,
 ): Promise<Task> {
-    const response = await fetch("http://localhost:5000/tasks", {
+    return request<Task>("http://localhost:5000/tasks", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(task),
     });
-
-    if (!response.ok) {
-        throw new Error("Failed to create task");
-    }
-
-    const result: TaskResponse = await response.json();
-
-    return result.data;
 }
 
 export async function updateTask(
     id: string,
     updates: Partial<Task>,
 ): Promise<Task> {
-    const response = await fetch(`http://localhost:5000/tasks/${id}`, {
-        method: "PATCH",
-        headers: {
-            "Content-Type": "application/json",
+    return request<Task>(
+        `http://localhost:5000/tasks/${id}`,
+        {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updates),
         },
-        body: JSON.stringify(updates),
-    });
-
-    if (!response.ok) {
-        throw new Error("Failed to update task");
-    }
-
-    const result: TaskResponse = await response.json();
-
-    return result.data;
+    );
 }
 
-
-export async function deleteTask(id: string): Promise<void> {
-    const response = await fetch(`http://localhost:5000/tasks/${id}`, {
-        method: "DELETE",
-    });
-
-    if (!response.ok) {
-        throw new Error("Failed to delete task");
-    }
+export async function deleteTask(
+    id: string,
+): Promise<void> {
+    await request<unknown>(
+        `http://localhost:5000/tasks/${id}`,
+        {
+            method: "DELETE",
+        },
+    );
 }
-
