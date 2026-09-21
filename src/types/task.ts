@@ -9,3 +9,8 @@ export type Task = {
 };
 
 export type CreateTask = Omit<Task, "id">;
+
+export type TaskPreview = Pick<
+    Task,
+    "title" | "priority" | "completed"
+>;
