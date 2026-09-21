@@ -12,11 +12,11 @@ async function request<T>(
 ): Promise<T> {
     const response = await fetch(url, options);
 
-    if (!response.ok) {
-        throw new Error("Request failed");
-    }
-
     const result: ApiResponse<T> = await response.json();
+
+    if (!response.ok) {
+        throw new Error(result.message || "Request failed");
+    }
 
     return result.data;
 }
