@@ -1,6 +1,9 @@
-# React + TypeScript + Vite
+# TaskFlow
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+TaskFlow is a simple task management application built with React, TypeScript, and Vite.
+
+It was created as a practice project to explore TypeScript concepts, React development, state management, and task management functionality.
+
 
 Currently, two official plugins are available:
 
